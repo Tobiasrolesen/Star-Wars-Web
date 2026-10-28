@@ -86,7 +86,20 @@ function replaceCharacter(id, data){
     return updatedCharacter;
 }
 
+function deleteCharacter(id){
+    //Samme som replaceCharacter
+    const index = characters.findIndex((character) => character.id === id);
+    if (index === -1){
+        return null;
+    }
+    //splice fjerne elementet fra arrayed direkte
+    characters.splice(index, 1);
+    saveCharacters();
+    //True eller false da controlleren bare skal vide om det lykkes eller ej.
+    return true;
+}
+
 //Midlertidig database i hukommelsen // brugt til at teste node -e "require('./src/services/CharacterService')"
 let characters = loadCharacters();
 console.log(`Indlæst ${characters.length} characters`);
-module.exports = { getAllCharacters, getCharacterById, addCharacter, replaceCharacter };
+module.exports = { getAllCharacters, getCharacterById, addCharacter, replaceCharacter, deleteCharacter };

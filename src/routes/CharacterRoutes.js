@@ -18,5 +18,7 @@ router.post("/", validateCharacter, characterController.createCharacter);
 //Tjek id før character. Afvis før serveren behøver arbejde på character
 router.put("/:id", validateId, validateCharacter, characterController.replaceCharacter);
 
+router.delete("/:id", validateId, characterController.deleteCharacter);
+
 //Mini App.
 module.exports = router;
