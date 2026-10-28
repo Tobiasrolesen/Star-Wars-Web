@@ -54,6 +54,15 @@ Vi har id 1, 2, 3, 4. Sletter vi id 2, er længden 3. Næste id bliver så 3 + 1
 Pt har vi et fast antal af karakter i vores characters.json fil. Disse ville blive. Hvis vi skrev noget nyt ville det også blive
 også selvom vi genstartede programmet
 
+## US-08: Logging-middleware
+
+Logger er en middleware funktion der skriver http metoden og urlen for hver request direkte i konsolen
+express kører middleware i den rækkefølge de er registreret. Først express.json så logger og til sidst routeren på /charecters
+Når loggeren har skrevet sin linje kalder den next, det betyder i teori at den er færdig og er klar til næste led.
+Hvis vi udkommentere next ville vi hænge, vi ville stadig logge http requesten men vi vil ikke komme ud at middleware og ud til service og controller.
+Man ville altså uden next bare stå og vente på at middleware var done og aldrig vide hvornår. res bliver derfor aldrig sendt og klienten venter forevigt.
+
+
 
 
 
@@ -72,6 +81,11 @@ node -e "require('./src/services/CharacterService')"
 *Resultat ved ingen json fil:*
 ![img_2.png](images/img_2.png)
 
+### Vi har efterfølgende testet postman
+
+#### Se linket
+
+(indsæt link)
 
 
 
