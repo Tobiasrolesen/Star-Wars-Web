@@ -157,7 +157,7 @@
 								"abc"
 							]
 						},
-						"description": "Forsøger at hente en karakter med et ugyldigt ID (ikke et tal).\n\nForventet svar er `400 Bad Request` med en fejlbesked.\n\n**Forventet response:**\n```json\n{ \"error\": \"ID must be a positive whole number\" }\n```"
+						"description": "Forsøger at hente en karakter med et ugyldigt ID (ikke et tal).\n\nForventet svar er `400 Bad Request` med en fejlbesked.\n\n**Forventet response:**\n```json\n{ \"error\": \"Id must be a positive whole number\" }\n```"
 					},
 					"response": [],
 					"event": [
@@ -579,7 +579,7 @@
 									"pm.test(\"Response indeholder fejlbesked om ugyldig JSON\", function () {",
 									"    const json = pm.response.json();",
 									"    pm.expect(json).to.have.property(\"error\");",
-									"    pm.expect(json.error).to.eql(\"Invalid JSON in request body\");",
+									"    pm.expect(json.error).to.eql(\"Invalid JSON\");",
 									"});"
 								]
 							}
@@ -617,7 +617,7 @@
 								"characters"
 							]
 						},
-						"description": "Forsøger at oprette en karakter med ugyldig JSON i request body (komma til sidst er ikke gyldig JSON).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Forventet response:**\n```json\n{ \"error\": \"Invalid JSON in request body\" }\n```"
+						"description": "Forsøger at oprette en karakter med ugyldig JSON i request body (komma til sidst er ikke gyldig JSON).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Forventet response:**\n```json\n{ \"error\": \"Invalid JSON\" }\n```"
 					},
 					"response": []
 				}
@@ -818,7 +818,7 @@
 									"pm.test(\"Response indeholder fejlbesked om ugyldigt ID\", function () {",
 									"    const json = pm.response.json();",
 									"    pm.expect(json).to.have.property(\"error\");",
-									"    pm.expect(json.error).to.eql(\"ID must be a positive whole number\");",
+									"    pm.expect(json.error).to.eql(\"Id must be a positive whole number\");",
 									"});"
 								]
 							}
@@ -857,7 +857,7 @@
 								"abc"
 							]
 						},
-						"description": "Forsøger at opdatere en karakter med et ugyldigt ID (ikke et tal).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"ID must be a positive whole number\" }\n```"
+						"description": "Forsøger at opdatere en karakter med et ugyldigt ID (ikke et tal).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"Id must be a positive whole number\" }\n```"
 					},
 					"response": []
 				},
@@ -1129,7 +1129,7 @@
 								"abc"
 							]
 						},
-						"description": "Forsøger at slette en karakter med et ugyldigt ID (ikke et tal).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Forventet response:**\n```json\n{ \"error\": \"ID must be a positive whole number\" }\n```"
+						"description": "Forsøger at slette en karakter med et ugyldigt ID (ikke et tal).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Forventet response:**\n```json\n{ \"error\": \"Id must be a positive whole number\" }\n```"
 					},
 					"response": [],
 					"event": [
