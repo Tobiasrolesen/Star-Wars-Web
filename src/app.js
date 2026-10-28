@@ -3,6 +3,7 @@ const logger = require("./middleware/Logger");
 const { notFound, errorHandler } = require("./middleware/ErrorHandlers");
 const characterRoutes = require("./routes/CharacterRoutes");
 const rebelRoutes = require("./routes/RebelRoutes");
+const path = require("path");
 const app = express();
 
 //registrering af alt middleware
@@ -10,6 +11,7 @@ app.use(express.json());
 
 //Bruger logger i stedet for inline i server
 app.use(logger);
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 //Fortæller hvor vi montere routeren
 app.use("/characters", characterRoutes);

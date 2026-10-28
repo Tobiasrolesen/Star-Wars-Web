@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jedi Data Archives</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Jedi Data Archives</h1>
+
+<section>
+    <h2>Opret karakter</h2>
+    <form id="character-form">
+        <input type="text" id="name" placeholder="Navn">
+        <select id="role">
+            <option value="">Vælg rolle</option>
+            <option value="Jedi">Jedi</option>
+            <option value="Sith">Sith</option>
+            <option value="Rebel">Rebel</option>
+            <option value="Smuggler">Smuggler</option>
+        </select>
+        <input type="text" id="planet" placeholder="Planet">
+        <button type="submit">Opret</button>
+    </form>
+    <p id="message"></p>
+</section>
+
+<section>
+    <h2>Karakterer</h2>
+    <ul id="character-list"></ul>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
