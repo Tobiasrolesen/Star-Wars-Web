@@ -45,7 +45,17 @@ function getNextId(){
     return Math.max(...ids) + 1;
 }
 
+//Retunere arrayed
+function getAllCharacters(){
+    return characters;
+}
+
+//Gennemgår arrayed og retunere det første element hvor betingelsen er true.
+function getCharacterById(id){
+    return characters.find((character) => character.id === id);
+}
+
 //Midlertidig database i hukommelsen // brugt til at teste node -e "require('./src/services/CharacterService')"
 let characters = loadCharacters();
 console.log(`Indlæst ${characters.length} characters`);
-module.exports = {};
+module.exports = { getAllCharacters, getCharacterById };
