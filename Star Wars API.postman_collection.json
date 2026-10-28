@@ -1,0 +1,1187 @@
+{
+	"info": {
+		"_postman_id": "749f40dd-29aa-4003-922c-851bfd85cefa",
+		"name": "Star Wars API",
+		"description": "# Star Wars Web API\n\nDette er dokumentationen for Star Wars karakterer API'et, bygget og testet med Postman.\n\n## Base URL\n\n`http://localhost:3000`\n\n## Endpoints\n\n- **GET /characters** – Henter alle Star Wars karakterer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "53420860",
+		"_collection_link": "https://go.postman.co/collection/53420860-749f40dd-29aa-4003-922c-851bfd85cefa?source=collection_link"
+	},
+	"item": [
+		{
+			"name": "GET TEST",
+			"item": [
+				{
+					"name": "Get characters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Henter en liste over alle Star Wars karakterer fra databasen.\n\n**Response felter:**\n\n- `id` – Unik ID for karakteren\n    \n- `name` – Karakterens navn\n    \n- `role` – Jedi, Sith, Rebel osv.\n    \n- `planet` – Hjemplanet\n    \n\nEn succesfuld forespørgsel returnerer `200 OK` med en JSON-array."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Get character by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder Luke Skywalker\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.name).to.eql(\"Luke Skywalker\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/characters/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"1"
+							]
+						},
+						"description": "Henter en enkelt Star Wars karakter baseret på ID.\n\nEn succesfuld forespørgsel returnerer `200 OK` med karakterens data.\n\n**Forventet response:**\n```json\n{ \"id\": 1, \"name\": \"Luke Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get character not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder fejlbesked\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.error).to.eql(\"Character not found\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/characters/99",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"99"
+							]
+						},
+						"description": "Forsøger at hente en karakter med et ID der ikke eksisterer.\n\nForventet svar er `404 Not Found` med en fejlbesked.\n\n**Forventet response:**\n```json\n{ \"error\": \"Character not found\" }\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get character invalid ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/characters/abc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"abc"
+							]
+						},
+						"description": "Forsøger at hente en karakter med et ugyldigt ID (ikke et tal).\n\nForventet svar er `400 Bad Request` med en fejlbesked.\n\n**Forventet response:**\n```json\n{ \"error\": \"ID must be a positive whole number\" }\n```"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 400\", () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Unknown route",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder fejlbesked om ukendt route\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"error\");",
+									"    pm.expect(json.error).to.eql(\"Route GET /hej not found\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/hej",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hej"
+							]
+						},
+						"description": "Forsøger at tilgå en route der ikke eksisterer på serveren.\n\n**Forventet statuskode:** `404 Not Found`\n\n**Forventet response:**\n```json\n{ \"error\": \"Route GET /hej not found\" }\n```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST TEST",
+			"item": [
+				{
+					"name": "Post character valid (Yoda)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Yoda\", \"role\": \"Jedi\", \"planet\": \"Dagobah\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Opretter en ny Star Wars karakter med gyldige data.\n\n**Forventet statuskode:** `201 Created`\n\n**Request body:**\n```json\n{ \"name\": \"Yoda\", \"role\": \"Jedi\", \"planet\": \"Dagobah\" }\n```\n\n**Forventet response:**\n```json\n{ \"id\": 5, \"name\": \"Yoda\", \"role\": \"Jedi\", \"planet\": \"Dagobah\" }\n```"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 201\", () => pm.response.to.have.status(201));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Post character with ignored ID (Obi-Wan)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response har server-tildelt id (ikke 999)\", function () {\n    const json = pm.response.json();\n    pm.expect(json.name).to.eql(\"Obi-Wan\");\n    pm.expect(json.id).to.eql(6);\n    pm.expect(json.id).to.not.eql(999);\n});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": 999, \"name\": \"Obi-Wan\", \"role\": \"Jedi\", \"planet\": \"Stewjon\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Opretter en ny karakter hvor et medfølgende `id`-felt ignoreres af serveren.\n\n**Forventet statuskode:** `201 Created`\n\n**Request body:**\n```json\n{ \"id\": 999, \"name\": \"Obi-Wan\", \"role\": \"Jedi\", \"planet\": \"Stewjon\" }\n```\n\n**Forventet response:**\nServeren tildeler selv et nyt ID — det medfølgende `id: 999` ignoreres.\n```json\n{ \"id\": <server-tildelt>, \"name\": \"Obi-Wan\", \"role\": \"Jedi\", \"planet\": \"Stewjon\" }\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Post character missing name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response indeholder fejlbesked om manglende name\", function () {\n    const json = pm.response.json();\n    pm.expect(json).to.have.property(\"error\");\n    pm.expect(json.error.toLowerCase()).to.include(\"name\");\n});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"role\": \"Jedi\", \"planet\": \"Tatooine\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Forsøger at oprette en karakter uden det påkrævede `name`-felt.\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"...\" }\n```\nFejlbeskeden skal indeholde en reference til `name`."
+					},
+					"response": []
+				},
+				{
+					"name": "Post character invalid name type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response indeholder fejlbesked om ugyldigt name og server crasher ikke\", function () {\n    const json = pm.response.json();\n    pm.expect(json).to.have.property(\"error\");\n    pm.expect(json.error.toLowerCase()).to.include(\"name\");\n});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": 123, \"role\": \"Jedi\", \"planet\": \"Tatooine\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Forsøger at oprette en karakter hvor `name` er et tal i stedet for en streng.\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": 123, \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"...\" }\n```\nFejlbeskeden skal indeholde en reference til `name`. Serveren må ikke crashe."
+					},
+					"response": []
+				},
+				{
+					"name": "Post character invalid role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response indeholder fejlbesked om ugyldig role\", function () {\n    const json = pm.response.json();\n    pm.expect(json).to.have.property(\"error\");\n    pm.expect(json.error.toLowerCase()).to.include(\"role\");\n});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Rey\", \"role\": \"Wizard\", \"planet\": \"Jakku\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Forsøger at oprette en karakter med en ugyldig `role`-værdi (f.eks. \"Wizard\" er ikke en gyldig rolle).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": \"Rey\", \"role\": \"Wizard\", \"planet\": \"Jakku\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"...\" }\n```\nFejlbeskeden skal indeholde en reference til `role`."
+					},
+					"response": []
+				},
+				{
+					"name": "Post character missing planet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response indeholder fejlbesked om manglende planet\", function () {\n    const json = pm.response.json();\n    pm.expect(json).to.have.property(\"error\");\n    pm.expect(json.error.toLowerCase()).to.include(\"planet\");\n});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Rey\", \"role\": \"Jedi\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Forsøger at oprette en karakter uden det påkrævede `planet`-felt.\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": \"Rey\", \"role\": \"Jedi\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"...\" }\n```\nFejlbeskeden skal indeholde en reference til `planet`."
+					},
+					"response": []
+				},
+				{
+					"name": "Post character blank planet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Rey\", \"role\": \"Jedi\", \"planet\": \" \"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Forsøger at oprette en karakter med et `planet`-felt der kun indeholder mellemrum (blank streng).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": \"Rey\", \"role\": \"Jedi\", \"planet\": \" \" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"...\" }\n```\nFejlbeskeden skal indeholde en reference til `planet`."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 400\", () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Invalid JSON body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder fejlbesked om ugyldig JSON\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"error\");",
+									"    pm.expect(json.error).to.eql(\"Invalid JSON in request body\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"Yoda\", }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters"
+							]
+						},
+						"description": "Forsøger at oprette en karakter med ugyldig JSON i request body (komma til sidst er ikke gyldig JSON).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Forventet response:**\n```json\n{ \"error\": \"Invalid JSON in request body\" }\n```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT TEST",
+			"item": [
+				{
+					"name": "Put character not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder fejlbesked om ikke fundet\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"error\");",
+									"    pm.expect(json.error).to.eql(\"Character not found\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters/99",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"99"
+							]
+						},
+						"description": "Forsøger at opdatere en karakter med et ID der ikke eksisterer.\n\n**Forventet statuskode:** `404 Not Found`\n\n**Request body:**\n```json\n{ \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"Character not found\" }\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Put update character",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Karakter er opdateret til Anakin Skywalker med id 2\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.id).to.eql(2);",
+									"    pm.expect(json.name).to.eql(\"Anakin Skywalker\");",
+									"    pm.expect(json.role).to.eql(\"Jedi\");",
+									"    pm.expect(json.planet).to.eql(\"Tatooine\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"2"
+							]
+						},
+						"description": "Opdaterer karakter med ID 2 med gyldige data.\n\n**Forventet statuskode:** `200 OK`\n\n**Request body:**\n```json\n{ \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\n\n**Forventet response:**\n```json\n{ \"id\": 2, \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\nID forbliver 2 og navn er nu opdateret til Anakin Skywalker."
+					},
+					"response": []
+				},
+				{
+					"name": "Put update character with ignored ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"ID forbliver 2 og ignorerer body id 50\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.id).to.eql(2);",
+									"    pm.expect(json.id).to.not.eql(50);",
+									"    pm.expect(json.name).to.eql(\"Anakin\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"id\": 50, \"name\": \"Anakin\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"2"
+							]
+						},
+						"description": "Opdaterer karakter med ID 2, men sender et `id`-felt i body der skal ignoreres af serveren.\n\n**Forventet statuskode:** `200 OK`\n\n**Request body:**\n```json\n{ \"id\": 50, \"name\": \"Anakin\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\n\n**Forventet response:**\n```json\n{ \"id\": 2, \"name\": \"Anakin\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\nID i body (50) ignoreres — karakterens ID forbliver 2."
+					},
+					"response": []
+				},
+				{
+					"name": "Put character invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder fejlbesked om ugyldigt ID\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"error\");",
+									"    pm.expect(json.error).to.eql(\"ID must be a positive whole number\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters/abc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"abc"
+							]
+						},
+						"description": "Forsøger at opdatere en karakter med et ugyldigt ID (ikke et tal).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": \"Anakin Skywalker\", \"role\": \"Jedi\", \"planet\": \"Tatooine\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"ID must be a positive whole number\" }\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Put character missing fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder fejlbesked om manglende role\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"error\");",
+									"    pm.expect(json.error.toLowerCase()).to.include(\"role\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"Anakin\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"2"
+							]
+						},
+						"description": "Forsøger at opdatere en karakter med ufuldstændig body — `role` og `planet` mangler.\n\nPUT kræver at alle felter sendes med.\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": \"Anakin\" }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"...\" }\n```\nFejlbeskeden skal indeholde en reference til `role`."
+					},
+					"response": []
+				},
+				{
+					"name": "Put character validation before not found",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": 1 }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/characters/99",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"99"
+							]
+						},
+						"description": "Forsøger at opdatere en ikke-eksisterende karakter (ID 99) med ugyldig body (`name` er et tal).\n\nServeren skal validere body **før** den checker om karakteren eksisterer — derfor forventes `400` og ikke `404`.\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Request body:**\n```json\n{ \"name\": 1 }\n```\n\n**Forventet response:**\n```json\n{ \"error\": \"...\" }\n```\nFejlbeskeden skal indeholde en reference til `name` eller validering — ikke \"not found\"."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 400\", () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "DELETE TEST",
+			"item": [
+				{
+					"name": "Delete character",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.test(\"Response body er tom\", function () {",
+									"    pm.expect(pm.response.text()).to.be.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/characters/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"4"
+							]
+						},
+						"description": "Sletter karakteren med ID 4.\n\n**Forventet statuskode:** `204 No Content`\n\nResponse body er tom — `204` returnerer ingen data."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete character already deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder fejlbesked om ikke fundet\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"error\");",
+									"    pm.expect(json.error).to.eql(\"Character not found\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/characters/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"4"
+							]
+						},
+						"description": "Forsøger at slette karakteren med ID 4 igen — den er allerede slettet.\n\n**Forventet statuskode:** `404 Not Found`\n\n**Forventet response:**\n```json\n{ \"error\": \"Character not found\" }\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete character not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code er 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response indeholder fejlbesked om ikke fundet\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"error\");",
+									"    pm.expect(json.error).to.eql(\"Character not found\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/characters/99",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"99"
+							]
+						},
+						"description": "Forsøger at slette en karakter med et ID der ikke eksisterer.\n\n**Forventet statuskode:** `404 Not Found`\n\n**Forventet response:**\n```json\n{ \"error\": \"Character not found\" }\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete character invalid ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/characters/abc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"characters",
+								"abc"
+							]
+						},
+						"description": "Forsøger at slette en karakter med et ugyldigt ID (ikke et tal).\n\n**Forventet statuskode:** `400 Bad Request`\n\n**Forventet response:**\n```json\n{ \"error\": \"ID must be a positive whole number\" }\n```"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 400\", () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Wrong method",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/characters/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"characters",
+						"1"
+					]
+				},
+				"description": "Forsøger at bruge HTTP-metoden PATCH på en route der ikke understøtter den.\n\n**Forventet statuskode:** `404 Not Found`\n\nServeren kender ikke PATCH-metoden på denne route og returnerer 404."
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status is 404\", () => pm.response.to.have.status(404));"
+						]
+					}
+				}
+			]
+		}
+	]
+}
