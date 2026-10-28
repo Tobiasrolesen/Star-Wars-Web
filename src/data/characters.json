@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Luke Skywalker", "role": "Jedi", "planet": "Tatooine" },
+  { "id": 2, "name": "Darth Vader", "role": "Sith", "planet": "Tatooine" },
+  { "id": 3, "name": "Leia Organa", "role": "Rebel", "planet": "Alderaan" },
+  { "id": 4, "name": "Han Solo", "role": "Smuggler", "planet": "Corellia" }
+]
+

@@ -44,6 +44,53 @@ flowchart TD
     D -->|JSON response| A
     D -.->|uventet fejl| H["Central fejlhandler 500<br/>ErrorHandlers.js"]
 ```
+## CharacterService
+#### Hvorfor er det en dårlig ide at bruge arrayets længde som ID
+Vi har valgt at bruge Math.max med ...ids. Det er gjort da man på den måde oversætter array til noget Math.max forstår
+Dermed får vi et nyt unikt id hver gang. Det er en dårlig ide her er et eksempel på hvorfor:
+Vi har id 1, 2, 3, 4. Sletter vi id 2, er længden 3. Næste id bliver så 3 + 1 = 4, men id 4 findes allerede, og vi har to karakterer med samme ID.
+
+#### Hvad sker der med karakterrene, når serveren genstartes.
+Pt har vi et fast antal af karakter i vores characters.json fil. Disse ville blive. Hvis vi skrev noget nyt ville det også blive
+også selvom vi genstartede programmet
+
+
+
+
+
+## Testing
+
+#### Vi har testet løbende. Under US - 3 testede vi ved at lave CharacterService og kører:
+node -e "require('./src/services/CharacterService')"
+
+*Resultatet var ved success:*
+![img.png](images/img.png)
+
+*Resultatet ved forkert json:*
+![img_1.png](images/img_1.png)
+
+*Resultat ved ingen json fil:*
+![img_2.png](images/img_2.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
