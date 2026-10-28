@@ -68,7 +68,25 @@ function addCharacter(data){
     return newCharacter;
 }
 
+//Opdatering af character
+function replaceCharacter(id, data){
+    //Find positioned i arrayed i stedet for selve objektets da vi skal erstatte noget.
+    const index = characters.findIndex((character) => character.id === id);
+    //Vi retunere null da controlleren selv oversætter null til 404 samme situation som getCharacterById
+    if (index === -1){
+        return null;
+    }
+
+    //Vi bruger modellen igen, id kommer fra url og ikke bodyen så man ikke kan manipulere data.
+    const updatedCharacter = buildCharacter(id, data);
+    characters[index] = updatedCharacter;
+
+    //Vi gemmer characterene.
+    saveCharacters();
+    return updatedCharacter;
+}
+
 //Midlertidig database i hukommelsen // brugt til at teste node -e "require('./src/services/CharacterService')"
 let characters = loadCharacters();
 console.log(`Indlæst ${characters.length} characters`);
-module.exports = { getAllCharacters, getCharacterById, addCharacter };
+module.exports = { getAllCharacters, getCharacterById, addCharacter, replaceCharacter };

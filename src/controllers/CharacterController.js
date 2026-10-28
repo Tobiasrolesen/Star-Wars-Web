@@ -21,4 +21,16 @@ function createCharacter(req, res){
     res.status(201).json(newCharacter);
 }
 
-module.exports = {getAllCharacters,getCharacterById,createCharacter};
+function replaceCharacter(req, res){
+    //Læs id
+    const id = Number(req.params.id);
+    //Spørg service
+    const updatedCharacter = characterService.replaceCharacter(id, req.body);
+    //send 404 ved fx null som vi beskrev i service.
+    if (!updatedCharacter){
+        return res.status(404).json({error: "Character not found"})
+    }
+    res.status(200).json(updatedCharacter);
+}
+
+module.exports = {getAllCharacters,getCharacterById,createCharacter, replaceCharacter};

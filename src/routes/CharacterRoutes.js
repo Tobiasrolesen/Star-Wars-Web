@@ -15,5 +15,8 @@ router.get("/:id", validateId, characterController.getCharacterById);
 //Har samme route som router.get"/"
 router.post("/", validateCharacter, characterController.createCharacter);
 
+//Tjek id før character. Afvis før serveren behøver arbejde på character
+router.put("/:id", validateId, validateCharacter, characterController.replaceCharacter);
+
 //Mini App.
 module.exports = router;
