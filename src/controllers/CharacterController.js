@@ -13,4 +13,12 @@ function getCharacterById(req, res){
     }
     res.status(200).json(character);
 }
-module.exports = {getAllCharacters,getCharacterById};
+
+function createCharacter(req, res){
+    //Kald igennem lagende
+    const newCharacter = characterService.addCharacter(req.body);
+    //statuskode 201 betyder created, mere præsist end bare 200 som er OK
+    res.status(201).json(newCharacter);
+}
+
+module.exports = {getAllCharacters,getCharacterById,createCharacter};

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { buildCharacter } = require("../models/Character");
 const DATA_FILE = path.join(__dirname, "..", "data", "characters.json");
 
 //Metode til at læse characters og retunere et array
@@ -55,7 +56,19 @@ function getCharacterById(id){
     return characters.find((character) => character.id === id);
 }
 
+//Tilføj character
+function addCharacter(data){
+    //Byg objekt på modellen
+    const newCharacter = buildCharacter(getNextId(), data);
+    //Vi .push til arrayed
+    characters.push(newCharacter);
+    //Gemmer direkte til filen
+    saveCharacters();
+    //Retunere objektet med id (OOP regler)
+    return newCharacter;
+}
+
 //Midlertidig database i hukommelsen // brugt til at teste node -e "require('./src/services/CharacterService')"
 let characters = loadCharacters();
 console.log(`Indlæst ${characters.length} characters`);
-module.exports = { getAllCharacters, getCharacterById };
+module.exports = { getAllCharacters, getCharacterById, addCharacter };
