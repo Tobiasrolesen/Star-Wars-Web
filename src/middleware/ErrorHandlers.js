@@ -12,6 +12,11 @@ function errorHandler(err, req, res, next){
     if (err.type === "entity.parse.failed"){
         return res.status(400).json({error: "Invalid JSON"})
     }
+    if (err.status >= 400 && err.status < 500) {
+        //Expose bruges til at fortælle om beskeden er sikker at vise. Fx ville en sti til en download ikke være god at vise.
+        const message = err.expose ? err.message : "Request could not be completed";
+        return res.status(err.status).json({ error: message });
+    }
     console.error(err);
     res.status(500).json({error: "Internal Server Error"});
 }
