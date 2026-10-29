@@ -89,6 +89,8 @@ Vi har id 1, 2, 3, 4. Sletter vi id 2, er længden 3. Næste id bliver så 3 + 1
 #### Hvad sker der med karakterrene, når serveren genstartes.
 Pt har vi et fast antal af karakter i vores characters.json fil. Disse ville blive. Hvis vi skrev noget nyt ville det også blive
 også selvom vi genstartede programmet
+Hvis karaktererne kun lå i et array i hukommelsen, ville alle ændringer forsvinde når serveren genstartes,
+og serveren ville starte forfra med de karakterer der står i koden. Det er derfor vi gemmer i characters.json.
 
 ## US-08: Logging-middleware
 
@@ -148,6 +150,11 @@ ugyldigt får vi 400 og fejlbeskeden fra serveren bliver vist på siden.
 * Den svarer med statuskode 302 Found og sætter headeren til character/1 uden data. Browseren læser derefter locationen og sender automatisk en GET request på chraracter 1. Derfor ser vi også 2 gange GET i console loggen
 fx /go-to-luke
 og /characters/1
+
+#### Hvorfor kan vi ikke sende download og redirect på samme request?
+* En request kan kun få ét svar. Både res.download og res.redirect sender et helt svar med statuskode og headers.
+  Når det første er sendt er svaret afsluttet, og hvis man prøver at sende et mere får man fejlen
+  "Cannot set headers after they are sent to the client".
 
 ## US-16: Eget kode-review
 #### Har funktionerne klare ansvarsområder?
