@@ -30,9 +30,9 @@ function loadCharacters(){
 }
 
 //Gemmer alle characters efter hver CRUD operation
-function saveCharacters(){
+function saveCharacters(list){
     //Objekt laves om til json tekst igen pænt.
-    fs.writeFileSync(DATA_FILE, JSON.stringify(characters, null, 2));
+    fs.writeFileSync(DATA_FILE, JSON.stringify(list, null, 2));
 }
 
 //Finder næste id som er unikt
@@ -60,10 +60,10 @@ function getCharacterById(id){
 function addCharacter(data){
     //Byg objekt på modellen
     const newCharacter = buildCharacter(getNextId(), data);
-    //Vi .push til arrayed
-    characters.push(newCharacter);
-    //Gemmer direkte til filen
-    saveCharacters();
+    //Vi bruger en "Spread-operator ligesom i Math.max. Vi opretter et nyt array med alle de gamle karakter
+    const updatedList = [...characters, newCharacter];
+    saveCharacters(updatedList);
+    characters = updatedList;
     //Retunere objektet med id (OOP regler)
     return newCharacter;
 }
@@ -79,10 +79,10 @@ function replaceCharacter(id, data){
 
     //Vi bruger modellen igen, id kommer fra url og ikke bodyen så man ikke kan manipulere data.
     const updatedCharacter = buildCharacter(id, data);
-    characters[index] = updatedCharacter;
-
-    //Vi gemmer characterene.
-    saveCharacters();
+    const updatedList = [...characters];
+    updatedList[index] = updatedCharacter;
+    saveCharacters(updatedList);
+    characters = updatedList;
     return updatedCharacter;
 }
 
@@ -92,9 +92,9 @@ function deleteCharacter(id){
     if (index === -1){
         return null;
     }
-    //splice fjerne elementet fra arrayed direkte
-    characters.splice(index, 1);
-    saveCharacters();
+    const updatedList = characters.filter((character) => character.id !== id);
+    saveCharacters(updatedList);
+    characters = updatedList;
     //True eller false da controlleren bare skal vide om det lykkes eller ej.
     return true;
 }
